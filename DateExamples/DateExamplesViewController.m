@@ -98,30 +98,6 @@
 	self.outputLabel = nil;
 }
 
-- (void) deleteFilesFromDownloadDirectory:(NSString *)directoryPath whichAreOlderThanInDays:(int)days
-{
-	NSDirectoryEnumerator* directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtPath:directoryPath];
-	
-	NSString* file;
-	
-	NSTimeInterval daysAgo = days * 24 * 60 * 60;
-	NSDate *expiryDate = [[NSDate alloc] initWithTimeIntervalSinceNow:-daysAgo];
-	
-	while ((file = [directoryEnumerator nextObject])) 
-	{
-		// Get creation date
-		NSString *currentFilePath = [directoryPath stringByAppendingPathComponent:file];
-		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:currentFilePath error:nil];
-		NSDate *fileCreationDate = [attributes objectForKey:NSFileCreationDate];
-		
-		// If creation date is before the expiry date, delete the item
-		if ([expiryDate compare:fileCreationDate] > 0)
-		{
-			[[NSFileManager defaultManager] removeItemAtPath:currentFilePath error:nil];
-		}
-	}
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
