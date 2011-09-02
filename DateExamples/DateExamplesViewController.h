@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface DateExamplesViewController : UIViewController {
-    
+	UILabel *outputLabel;
 }
+
+@property (nonatomic, retain) UILabel *outputLabel;
+
+// Shows how to compare two dates
+- (void) compareDates;
 
 @end

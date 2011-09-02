@@ -9,6 +9,7 @@
 #import "DateExamplesViewController.h"
 
 @implementation DateExamplesViewController
+@synthesize outputLabel;
 
 - (void)dealloc
 {
@@ -30,26 +31,61 @@
 {
 	[super viewDidLoad];
 	
-	// Create test date one - 5 days before today
-	NSTimeInterval daysAgo = 5 * 24 * 60 * 60;
-	NSDate *testDateOne = [[NSDate alloc] initWithTimeIntervalSinceNow:-daysAgo];
+	// Set background
+	self.view.backgroundColor = [UIColor whiteColor];
 	
-	// Create test date two - 3 days before today
-	daysAgo = 3 * 24 * 60 * 60;
-	NSDate *testDateTwo = [[NSDate alloc] initWithTimeIntervalSinceNow:-daysAgo];
+	// Create test label
+	UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 30, 260, 260)];
+	self.outputLabel = tempLabel;
+	[tempLabel release];
+	self.outputLabel.numberOfLines = 0;
+	self.outputLabel.lineBreakMode = UILineBreakModeWordWrap;
+	self.outputLabel.font = [self.outputLabel.font fontWithSize:10.0];
+	[self.view addSubview:tempLabel];
 	
-	// Compare test date one to test date two
-	if ([testDateOne compare:testDateTwo] == NSOrderedDescending)
-	{
-		NSLog(@"Test Date Two is before Test Date One.");
-	}
-	else if ([testDateOne compare:testDateTwo] == NSOrderedAscending)
-	{
-		NSLog(@"Test Date Two is after Test Date One.");
-	}
-	else if ([testDateOne compare:testDateTwo] == NSOrderedSame)
-	{
-		NSLog(@"Test Date Two is the same as Test Date One.");
+	// Run a test
+	[self compareDates];
+}
+
+// Shows how to compare two dates
+- (void) compareDates
+{
+	// Create test date one - Christmas, 25th of December 1970, 1:15pm
+	NSDateComponents *comps = [[NSDateComponents alloc] init];
+	[comps setYear:1970];
+	[comps setMonth:12];
+	[comps setDay:25];
+	[comps setHour:13];
+	[comps setMinute:15];
+	[comps setSecond:0];
+	NSDate *christmasDay = [[NSCalendar currentCalendar] dateFromComponents:comps];
+	[comps release];
+	
+	// Create testDateTwo - 20th of December 1970, 3:30pm
+	comps = [[NSDateComponents alloc] init];
+	[comps setYear:1970];
+	[comps setMonth:12];
+	[comps setDay:20];
+	[comps setHour:15];
+	[comps setMinute:30];
+	[comps setSecond:0];
+	NSDate *testDateTwo = [[NSCalendar currentCalendar] dateFromComponents:comps];
+	[comps release];
+
+	// Compare testDateTwo with Christmas day, 1970
+	NSComparisonResult result = [christmasDay compare:testDateTwo];
+	switch (result) {
+		case NSOrderedDescending:
+			outputLabel.text = @"testDateTwo is before Christmas Day 1970, 1:15pm";
+			break;
+		case NSOrderedAscending:
+			outputLabel.text = @"testDateTwo is after Christmas Day 1970, 1:15pm";
+			break;
+		case NSOrderedSame:
+			outputLabel.text = @"testDateTwo is on Christmas Day 1970, 1:15pm";
+			break;
+		default:
+			break;
 	}
 }
 
@@ -59,6 +95,7 @@
     
 	// Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+	self.outputLabel = nil;
 }
 
 - (void) deleteFilesFromDownloadDirectory:(NSString *)directoryPath whichAreOlderThanInDays:(int)days
